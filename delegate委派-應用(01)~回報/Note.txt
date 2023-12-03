@@ -1,4 +1,5 @@
-﻿  **具象媒體科技** instanceMT.com
+﻿
+  **具象媒體科技** instanceMT.com
   
   [C#簡單聊~委派應用(01)]~工作回報
 
@@ -14,5 +15,51 @@
 	 2) B完成工作後，呼叫A送過來的方法回報工作完成了。
 
   3. 程式概要：
-     1) FrmA、FrmB分別代表A與B兩個實體。
-	 2) 定義一個
+     1) FrmA、FrmB分別代表A與B兩個實體，簡稱A(A也可以代表任何個體)與B。
+
+	 2) 於 TaskHelper.cs 定義一個用於「回報」的委派型別： ReturnHelp
+	    // 定義委派型別語法： [存取範圍] delegate 函式回傳值型別 委派型別名稱(參數列)
+        // ReturnHelp 宣告的委派物件指向没有回傳值、具一個 Form 型態參數的方法
+        // B工作完成時以本委派型別的物件向A回報
+        // 參數型態是 Form => 可以傳遞 Form 及 Form 子類別的物件
+        public delegate void ReturnHelp(Form returnFrom);
+
+	 3) 於 FrmA.cs 定義一個合乎 ReturnHelp 規範的函式：ReturnTask
+	    public  void ReturnTask(Form returnFrom)
+        {
+            returnFrom.Visible = false;
+            MessageBox.Show($"{returnFrom.Text} 完成工作");
+        }
+
+	 4) 在FrmB.cs定義接收A工作的函式：AcceptHelp
+	    public void AcceptHelp(ReturnHelp returnHelp)
+        {
+            if (_returnHelp == null)
+            {
+                _returnHelp = returnHelp;
+            }
+        }
+
+     5) A呼叫B的 AcceptHelp請B協助處理工作
+	    private void BtnAskBForHelp_Click(object sender, EventArgs e)
+        {
+            if (frmB == default)
+            {
+                frmB = new FrmB();
+            }
+            frmB.Visible = true;
+
+            // 將ReturnTask 方法傳送給B
+            // B 端以 ReturnHelp(委派)型別接收 
+            // 完工時B以這個方法向A回報
+            frmB.AcceptHelp(this.ReturnTask);
+        }
+
+     6) B完成工作時，呼叫委派回報完成工作。
+        private void BtnReturnHelp_Click(object sender, EventArgs e)
+        {
+            if (_returnHelp != default)
+            {
+                _returnHelp(this);
+            }
+        }

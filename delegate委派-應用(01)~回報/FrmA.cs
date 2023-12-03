@@ -27,7 +27,6 @@ namespace delegate委派_應用_01__回報
             frmB.AcceptHelp(this.ReturnTask);
         }
 
-
         /// <summary>
         /// 受委託端工作完成時以這個方法回報
         /// </summary>
@@ -39,5 +38,6 @@ namespace delegate委派_應用_01__回報
             returnFrom.Visible = false;
             MessageBox.Show($"{returnFrom.Text} 完成工作");
         }
+
     }
 }

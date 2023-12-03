@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static delegate委派_應用_01__回報.TaskHelper;
 
 namespace delegate委派_應用_01__回報
 {
@@ -29,7 +30,6 @@ namespace delegate委派_應用_01__回報
             {
                 _returnHelp = returnHelp;
             }
-            
         }
 
         private void FrmB_Load(object sender, EventArgs e)
@@ -48,6 +48,7 @@ namespace delegate委派_應用_01__回報
             if (_returnHelp != default)
             {
                 _returnHelp(this);
+                _returnHelp = null;
             }
         }
     }
